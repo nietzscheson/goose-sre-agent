@@ -12,7 +12,6 @@
         pkgs = import nixpkgs { inherit system; };
 
         commonDeps = with pkgs; [
-          git
           awscli2
           goose-cli
         ];
