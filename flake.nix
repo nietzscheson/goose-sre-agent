@@ -11,27 +11,9 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        pythonEnv = pkgs.python312.withPackages (ps: with ps; [
-          pip
-        ]);
-
         commonDeps = with pkgs; [
-          pythonEnv
-          uv
           git
-          terraform
-          python312
           awscli2
-          httpie
-          go
-          go-task
-          docker
-          jq
-          nodejs_20
-          nodePackages.lerna
-          subfinder
-          amass
-          yarn
           goose-cli
         ];
       in {
@@ -39,10 +21,8 @@
           packages = commonDeps;
 
           shellHook = ''
-            pyenv global system
-            export pythonEnv=${pythonEnv}
-            export PATH=$PATH:${pythonEnv}/bin
-
+            uv sync
+            
             export GOOSE_PATH_ROOT="$PWD/.goose"
             mkdir -p "$GOOSE_PATH_ROOT"
 
@@ -51,13 +31,7 @@
             export AWS_REGION=us-east-1
             export AWS_CONFIG_FILE="$PWD/.aws/config"
 
-            mkdir -p ~/.docker
           '';
-          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
-            pkgs.stdenv.cc.cc.lib
-
-          ];
-
         };
       });
 
