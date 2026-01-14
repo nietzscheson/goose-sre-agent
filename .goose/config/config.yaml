@@ -1,0 +1,40 @@
+GOOSE_PROVIDER: google
+GOOSE_MODEL: gemini-2.5-flash
+extensions:
+  cloudwatch:
+    enabled: true
+    type: stdio
+    name: cloudwatch
+    description: AWS CloudWatch Observability (metrics/logs/alarms) via awslabs.cloudwatch-mcp-server
+    cmd: uvx
+    args:
+    - awslabs.cloudwatch-mcp-server@latest
+    envs:
+      region: us-east-1
+      profile: default
+      FASTMCP_LOG_LEVEL: ERROR
+    env_keys: []
+    timeout: 30000
+    bundled: null
+    available_tools: []
+  github:
+    enabled: true
+    type: stdio
+    name: github
+    description: GitHub MCP Server
+    cmd: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-github"
+    timeout: 30000
+  sentry:
+      enabled: true
+      type: stdio
+      name: sentry
+      description: Sentry MCP Server
+      cmd: npx
+      args:
+        - -y
+        - mcp-remote@latest
+        - https://mcp.sentry.dev/mcp
+      timeout: 30000
